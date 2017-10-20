@@ -29,8 +29,10 @@ func main() {
 	// golang has some scheduler or so that runs this in different os threads, but setuid affects only the current thread, soo we need this call
 	runtime.LockOSThread()
 
-	squashFile := os.Args[0] + ".squashfs"
-	rootfsDir := os.Args[0] + ".dir"
+	executable, myerr := os.Executable() // FIXME: the documentation say this could follow the symlink (depends on the platform), a behavior we don't want check this out
+	check(myerr)
+	squashFile := executable + ".squashfs"
+	rootfsDir := executable + ".dir"
 	squashArgs := os.Args[1:]
 
 	var stat syscall.Stat_t
